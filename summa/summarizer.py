@@ -1,3 +1,5 @@
+import numpy as np
+import flair.embeddings import WordEmbeddings
 from math import log10
 
 from .pagerank_weighted import pagerank_weighted_scipy as _pagerank
@@ -9,7 +11,7 @@ from .commons import remove_unreachable_nodes as _remove_unreachable_nodes
 def _set_graph_edge_weights(graph):
     for sentence_1 in graph.nodes():
         for sentence_2 in graph.nodes():
-
+            
             edge = (sentence_1, sentence_2)
             if sentence_1 != sentence_2 and not graph.has_edge(edge):
                 similarity = _get_similarity(sentence_1, sentence_2)
@@ -51,6 +53,30 @@ def _get_similarity(s1, s2):
         return 0
 
     return common_word_count / (log_s1 + log_s2)
+
+
+def convert_tensor(s1, s2):
+    return
+
+def _get_cosine_similarity(v1, v2):
+    # init embedding
+    glove_embedding = WordEmbeddings('glove')
+
+    return 
+
+def get_rouge_score(s1, s2):
+    # Documentation found at https://pypi.org/project/py-rouge/ 
+    evaluator = rouge.Rouge(metrics=['rouge-n', 'rouge-l', 'rouge-w'],
+        max_n=4,
+        limit_length=True,
+        length_limit=100,
+        length_limit_type='words',
+        alpha=0.5, # Default F1_score
+        weight_factor=1.2,
+        stemming=True)
+
+    scores = evaluator.get_scores(s1, s2)
+    return scores
 
 
 def _count_common_words(words_sentence_one, words_sentence_two):
